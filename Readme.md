@@ -55,10 +55,66 @@ In order to add namespaces this module contains a bucket dispatch mechanism.
 The pseudo-code above would write the data to different backend stores depending on the name passed in. This way you can set up a global storage object that your entire app can use to interact with storage mechanisms. As long as you keep the same namespaces, you can easily switch out the backend mechanisms.
 
 ### Mongo DB
+
+The *URL* parameter to the create function is passed directly to *MongoClient* of the [Native Mongo](https://npmjs.org/package/mongodb) module. To determine which collection to use you need to set *options.collection* or alternatively pass a *collection* query argumet as part of the URL.
+
+    Store('mongodb://localhost:28017/database', { collection:'mycollection' }, function(err, store) { /* callback */ });
+
+or
+
+    Store('mongodb://localhost:28017/database?collection=mycollection', function(err, store) { /* callback */ });
+
 ### Riak
+
+    Store('riak://localhost', function(err, store) { /* callback */ }) // Uses a bucket named localhost on the riak-nod on 127.0.0.1
+    Store('riak://mybucket', { host:'localhost' }, function(err, store) { /* callback */ })  // Uses a bucket named mybucket on the riak-node on 127.0.0.1
+    Store('riak://mybucket', { host:[ 'node1', 'node2', 'node3', 'node4', 'node5' ] }, function(err, store) { /* callback */ })  // Uses a bucket named mybucket on the riak-nodes at node1, node2, node2, node4, and node5.
+    Store('riak://mybucket:1234', { host:'localhost' }, function(err, store) { /* callbaack */ }) // Uses port 1234 instead of 8098 to contact your riak nodes
+
+
 ### Amazon S3
+
+    Store('s3://mybucket', { key:'<aws-key>', secret:'<aws-secret>' }, function(err, store) { /* callback */ });
+
+You can also use the options to pass in any knox parameters such as 'region' or 'endpoint'. Be aware that this module sets defaults for
+
+  * *style* = 'virtualHost'
+  * *secure* = false
+
 ### Level-Up
+
+    Store('levelup:///var/lib/database', function(err, store) { /* callback */ }); // Stores stuff in /var/lib/database
+
 ### MemCache
+
+    Store('memcache://localhost:11211', function(err, store) { /* callback */ }); // Uses the memcached at 127.0.0.1:11211
+    Store('memcache://my-nick-name', { host:'localhost:11211' }, function(err, store) { /* callback */ }); // Uses the memcached at 127.0.0.1:11211
+
+The stuff in options.host can be any valid definition understood by [MemCacheD](https://npmjs.org/package/memcached)
+
+### Multi
+
+The multi store needs *options.stores* to be an array of objects that look like:
+
+    {
+      "url":"<a valid store url>",
+      "options": { <matching-store-options> }
+    }
+
+These are used to setup the child stores. In addition you can set *options.write* to a number. This will then cause the multi store to only ever try to write data (operations *put* & *delete*) to the first number of stores.
+
+    Store('multi://cached', {
+      stores:[
+        { url:'memcache://localhost:11211' },
+        { url:'s3://mybucket', options:{ key:'<aws-key>', secret:'<aws-secret>' } },
+        { url:'mongodb://localhost/mydb?collection=mycollection' }
+      ],
+      write:2
+    }, function(err, store) { /* callback */ });
+
+The pseudo example above will write stuff to memcached and s3, but will read form all three stores. This way you can cache using memcached while writing new data only to s3 but retrieving old data form mongodb if it not yet migrated to s3.
+
+This would be a typical migration scenario to slowly migrate from mongodb to s3.
 
 ## License
 
