@@ -1,0 +1,11 @@
+{
+  "name":"abstract-store",
+  "description":"a module to abstract key/value storage away from the underlying technology",
+  "version":"0.1.0",
+  "keywords":["mongodb","riak","leveldb","nedb","s3"],
+  "repository":{ "type":"git", "url":"https://github.com/phidelta/abstract-store.git" },
+  "author":{ "name":"Philipp Dunkel", "email":"p.dunkel@me.com" },
+  "main":"index.js",
+  "dependencies":{},
+  "optionalDependencies":{}
+}
