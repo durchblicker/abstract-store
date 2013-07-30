@@ -33,7 +33,6 @@ function Register(scheme, mod) {
 
 Fs.readdirSync(Path.join(__dirname, 'lib', 'stores')).forEach(function(scheme) {
   if (!/\.js$/.test(scheme) || /^\./.test(scheme)) return;
-
   try {
     Register(scheme.split('.').shift(), module.exports[scheme.split('.').shift()] = require(Path.join(__dirname, 'lib', 'stores', scheme)));
   } catch(ex) {
