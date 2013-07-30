@@ -6,6 +6,8 @@ So the idea of this module was to provide a very few methods that any storage me
 
 In addition there is a *multi* backend that allows for migration by reading from the specified stores in order and doing writes by writing to the stores either in order or only to the first. Ths way one could migrate the storage from one method to the next by keeping the old mechanism around as a read-only until all the data has been migrated.
 
+[![NPM](https://nodei.co/npm/abstract-store.png)](https://nodei.co/npm/abstract-store/)
+
 ## Install
 
     npm install abstract-store
@@ -15,7 +17,7 @@ In addition there is a *multi* backend that allows for migration by reading from
 ### Storage Creation
 
     var Store = require('store');
-    Store.create('<url>'[, <options>], function(err, storeInstance) {
+    Store('<url>'[, <options>], function(err, storeInstance) {
 
     });
 
