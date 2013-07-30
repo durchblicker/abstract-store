@@ -1,12 +1,10 @@
-# Abstract-Store
+# Abstract-Store [![NPM](https://nodei.co/npm/abstract-store.png)](https://nodei.co/npm/abstract-store/)
 
 The problem I faced, that it was highly unclear what backend storage technology would suit our needs best. Also there was no clear means to migrate from one to another.
 
 So the idea of this module was to provide a very few methods that any storage mechanism would need to fulfill and then implement that interface with a multitude of backend means.
 
 In addition there is a *multi* backend that allows for migration by reading from the specified stores in order and doing writes by writing to the stores either in order or only to the first. Ths way one could migrate the storage from one method to the next by keeping the old mechanism around as a read-only until all the data has been migrated.
-
-[![NPM](https://nodei.co/npm/abstract-store.png)](https://nodei.co/npm/abstract-store/)
 
 ## Install
 
