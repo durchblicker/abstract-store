@@ -25,9 +25,9 @@ Supported URL schemas are:
 
  * *mongodb* - a valid mongodb URL that can also be provided to MongoClient
  * *riak* - to connect to a riak cluster. (Example: *riak://default.host.name[:port]*, the *options* can contain information on other cluster nodes)
- * *nedb* - is almost like a *file://* but it points to a base directory to use for storage. (Example: *nedb:///path/to/storage/location)
  * *s3* - describes what Amazon-S3 Bucket to use (Example: *s3://bucketname*, the options contain access credentials and access methodology. See [knox](http://npmjs.org/package/knox) for details)
  * *levelup* - is almost like a *file://* but it points to a base directory to use for storage. (Example: *levelup:///path/to/storage/location)
+ * *memcache* - permits caching via MemCached. Of course this type will not support the *key* operation, but it will return an empty array of keys when asked to do it none the less. (Example: *memcache://your-host:port*)
  * *multi* - chain multiple storage mechanisms (Example: *multi://name-to-describe-it* the important stuff is in the options)
 
 ### Operations
@@ -35,7 +35,30 @@ Supported URL schemas are:
 #### storeInstance.get(key, callback)
 #### storeInstance.put(key, value, callback)
 #### storeInstance.del(key, callback)
-#### storeInstance.key([keyprefix, ]callback)
+#### storeInstance.key(keyprefix, callback)
+
+### Buckets
+
+In order to add namespaces this module contains a bucket dispatch mechanism.
+
+    var Pea = require('pea');
+    var Store = require('store');
+    var bucket1 = Pea(Store, 'url1', {});
+    var bucket2 = Pea(Store, 'url2', {});
+    Pea.all(bucket1, bucket2).done(function(bucket1, bucket2) {
+      Store.bucket({ namespace1:bucket1, namespace2:bucket2 }, function(err, storage) {
+        storage.put('namespace1', 'key', 'value', function() { /* callback */ });
+        storage.put('namespace2', 'key', 'value', function() { /* callback */ });
+      });
+    });
+
+The pseudo-code above would write the data to different backend stores depending on the name passed in. This way you can set up a global storage object that your entire app can use to interact with storage mechanisms. As long as you keep the same namespaces, you can easily switch out the backend mechanisms.
+
+### Mongo DB
+### Riak
+### Amazon S3
+### Level-Up
+### MemCache
 
 ## License
 
