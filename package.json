@@ -6,7 +6,7 @@
     "mongodb",
     "riak",
     "leveldb",
-    "nedb",
+    "memcached",
     "s3"
   ],
   "repository": {
