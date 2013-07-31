@@ -20,7 +20,7 @@ function Create(url, options, callback) {
   var urlobj = Url.parse(url, true);
   options = options || urlobj.query || {};
 
-  var scheme = Stores[url.protocol.split(':').shift()];
+  var scheme = Stores[urlobj.protocol.split(':').shift()];
   if (!scheme) return setImmediate(function() { callback(new Error('invalid scheme: '+urlobj.protocol)); });
   scheme(url, options, callback);
 }
