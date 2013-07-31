@@ -1,7 +1,7 @@
 {
   "name": "abstract-store",
   "description": "a module to abstract key/value storage away from the underlying technology",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": [
     "mongodb",
     "riak",
